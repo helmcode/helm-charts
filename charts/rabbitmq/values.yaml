@@ -1,0 +1,8 @@
+spec:
+    replicas: 3
+    image: rabbitmq:3.13.7-management
+    service:
+      type: ClusterIP
+    persistence:
+      storageClassName: gp2
+      storage: 10Gi

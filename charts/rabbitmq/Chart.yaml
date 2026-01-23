@@ -1,0 +1,7 @@
+apiVersion: v2
+name: rabbitmq
+description: RabbitMQ Helm chart using the RabbitMQ Cluster Operator
+type: application
+
+version: 0.1.0
+appVersion: "1.0.0"
