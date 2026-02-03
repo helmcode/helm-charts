@@ -1,0 +1,30 @@
+{{- if .Values.loadBalancer.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rabbitmq.fullname" . }}-loadbalancer
+  labels:
+    {{- include "rabbitmq.labels" . | nindent 4 }}
+  {{- with .Values.loadBalancer.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.loadBalancer.type }}
+  {{- with .Values.loadBalancer.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: amqp
+      port: {{ .Values.loadBalancer.ports.amqp.port }}
+      targetPort: {{ .Values.loadBalancer.ports.amqp.targetPort }}
+      protocol: {{ .Values.loadBalancer.ports.amqp.protocol }}
+    - name: management
+      port: {{ .Values.loadBalancer.ports.management.port }}
+      targetPort: {{ .Values.loadBalancer.ports.management.targetPort }}
+      protocol: {{ .Values.loadBalancer.ports.management.protocol }}
+  selector:
+    app.kubernetes.io/name: {{ include "rabbitmq.fullname" . }}
+    app.kubernetes.io/component: rabbitmq
+{{- end }}
